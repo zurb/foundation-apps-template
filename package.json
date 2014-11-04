@@ -21,7 +21,8 @@
     "run-sequence": "^1.0.1"
   },
   "dependencies": {
-    "highlight.js": "~7.5.0"
+    "highlight.js": "~7.5.0",
+    "node-sass": "^1.0.3"
   },
   "private": true
 }
