@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "postinstall": "bower install",
-    "test": "gulp"
+    "start": "gulp"
   },
   "devDependencies": {
     "front-matter": "^0.2.0",
