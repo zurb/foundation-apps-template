@@ -1,19 +1,24 @@
 # Foundation for Apps Template
 
-This is the default template project for Foundation for Apps. It's powered by Node, Gulp, Angular, and libsass.
+This is the default template project for Foundation for Apps. It's powered by Node, Gulp, Angular, and libsass. It provides you with a basic template to get started with Angular and Foundation for Apps. If you're already an Angular developer, you may instead want to install the components into your own stack using Bower: `bower install foundation-apps`
 
 ## Requirements
 
-You'll need this software installed on your machine first:
- - [Node.js](http://nodejs.org/): use the installer provided on the Node.js website.
- - [Git](http://git-scm.com/downloads): use the installer provided on Git's website.
+You'll need the following software installed to get started.
+
+  * [Node.js](http://nodejs.org): Use the installer provided on the NodeJS website.
+  * [Git](http://git-scm.com/downloads): Use the installer for your OS.
+    * Windows users can also try [Git for Windows](http://git-for-windows.github.io/).
+  * [Ruby](https://www.ruby-lang.org/en/): Use the installer for your OS. For Windows users, [JRuby](http://jruby.org/) is a popular alternative.
+    * With Ruby installed, run `gem install bundler sass`.
+  * [Gulp](http://gulpjs.com/) and [Bower](http://bower.io): Run `[sudo] npm install -g gulp bower`
 
 ## Get Started
 
 Clone this repository, where `app` is the name of your app.
 
 ```bash
-git clone https://github.com/zurb/foundation-apps.git app
+git clone https://github.com/zurb/foundation-apps-template.git app
 ```
 
 Change into the directory.
@@ -31,7 +36,7 @@ npm install
 While you're working on your project, run:
 
 ```bash
-npm test
+npm start
 ```
 
 This will compile the Sass and assemble your Angular app. **Now go to `localhost:8080` in your browser to see it in action.**
@@ -39,5 +44,5 @@ This will compile the Sass and assemble your Angular app. **Now go to `localhost
 To run the compiling process once, without watching any files:
 
 ```bash
-npm test build
+npm start build
 ```
