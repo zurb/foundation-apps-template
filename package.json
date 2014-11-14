@@ -21,6 +21,7 @@
     "run-sequence": "^1.0.1"
   },
   "dependencies": {
+    "gulp-ruby-sass": "^0.7.1",
     "highlight.js": "~7.5.0",
     "node-sass": "^1.0.3"
   },

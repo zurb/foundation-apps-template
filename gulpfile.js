@@ -3,7 +3,7 @@ var gulp           = require('gulp'),
     runSequence    = require('run-sequence'),
     frontMatter    = require('gulp-front-matter'),
     autoprefixer   = require('gulp-autoprefixer'),
-    sass           = require('gulp-sass'),
+    sass           = require('gulp-ruby-sass'),
     uglify         = require('gulp-uglify'),
     concat         = require('gulp-concat'),
     connect        = require('gulp-connect'),
@@ -41,10 +41,9 @@ gulp.task('copy-partials', ['clean-partials'], function() {
 gulp.task('sass', function() {
   return gulp.src('client/assets/scss/app.scss')
     .pipe(sass({
-      includePaths: ['bower_components/foundation-apps/scss', 'client/assets/scss'],
+      loadPath: ['bower_components/foundation-apps/scss', 'client/assets/scss'],
       style: 'nested',
-      sourceComments: true,
-      errLogToConsole: true
+      bundleExec: true
     }))
     .pipe(gulp.dest('./build/assets/css/'));
 });
