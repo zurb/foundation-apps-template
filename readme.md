@@ -27,10 +27,11 @@ Change into the directory.
 cd app
 ```
 
-Install the dependencies. Running `npm install` will also automatically run `bower install` after. If you're running Mac OS or Linux, you may need to run `sudo npm install` instead, depending on how your machine is configured.
+Install the dependencies. Running `npm install` will also automatically run `bower install` after. If you're running Mac OS or Linux, you may need to run `sudo npm install` instead, depending on how your machine is configured. Running `bundle` will install the correct version of Sass for the template.
 
 ```bash
 npm install
+bundle
 ```
 
 While you're working on your project, run:
