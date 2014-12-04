@@ -45,6 +45,9 @@ gulp.task('sass', function() {
       style: 'nested',
       bundleExec: true
     }))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie 10']
+    }))
     .pipe(gulp.dest('./build/assets/css/'));
 });
 

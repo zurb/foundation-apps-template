@@ -1,6 +1,6 @@
 {
   "name": "foundation-apps-template",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "authors": [
     "ZURB"
   ],
@@ -23,6 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "foundation-apps": "zurb/foundation-apps"
+    "foundation-apps": "~1.0.0"
   }
 }
