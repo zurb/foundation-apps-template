@@ -31,6 +31,7 @@ Install the dependencies. Running `npm install` will also automatically run `bow
 
 ```bash
 npm install
+bower install
 bundle
 ```
 
