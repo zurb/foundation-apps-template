@@ -59,7 +59,6 @@ gulp.task('uglify', ['uglify-angular'], function() {
     'bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js',
     'bower_components/notify.js/notify.js',
     'bower_components/tether/tether.js',
-    'bower_components/foundation-apps/js/foundation/**/*.js',
     'client/assets/js/app.js'
   ];
 
