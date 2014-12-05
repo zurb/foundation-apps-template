@@ -45,6 +45,9 @@ gulp.task('sass', function() {
       style: 'nested',
       bundleExec: true
     }))
+    .on('error', function(e) {
+      console.log(e);
+    })
     .pipe(autoprefixer({
       browsers: ['last 2 versions', 'ie 10']
     }))
