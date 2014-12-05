@@ -34,7 +34,7 @@ gulp.task('clean-partials', function(cb) {
 });
 
 gulp.task('copy-partials', ['clean-partials'], function() {
-  return gulp.src(['js/angular/partials/**.*'])
+  return gulp.src(['bower_components/foundation-apps/js/angular/partials/**.*'])
     .pipe(gulp.dest('./build/partials/'));
 });
 
