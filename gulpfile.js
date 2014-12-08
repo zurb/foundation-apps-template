@@ -23,10 +23,14 @@ gulp.task('copy', function() {
     '!./client/templates/**/*.*',
     '!./client/assets/{scss,js}/**/*.*'
   ];
+
   return gulp.src(dirs, {
     base: './client/'
   })
     .pipe(gulp.dest('build'));
+
+  return gulp.src('bower_components/foundation-apps/iconic/**/*')
+    .pipe(gulp.dest('build/assets/img/iconic/'));
 });
 
 gulp.task('clean-partials', function(cb) {
@@ -61,7 +65,8 @@ gulp.task('uglify', ['uglify-angular'], function() {
     'bower_components/fastclick/lib/fastclick.js',
     'bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js',
     'bower_components/notify.js/notify.js',
-    'bower_components/tether/tether.js'
+    'bower_components/tether/tether.js',
+    'client/assets/js/app.js'
   ];
 
   return gulp.src(libs)
@@ -82,8 +87,7 @@ gulp.task('uglify-angular', function() {
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/ui-router/release/angular-ui-router.js',
-    'bower_components/foundation-apps/js/angular/**/*.js',
-    'client/assets/js/app.js'
+    'bower_components/foundation-apps/js/angular/**/*.js'
   ];
 
   return gulp.src(libs)
