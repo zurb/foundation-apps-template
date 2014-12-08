@@ -24,7 +24,7 @@ gulp.task('copy', function() {
     '!./client/assets/{scss,js}/**/*.*'
   ];
 
-  return gulp.src(dirs, {
+  gulp.src(dirs, {
     base: './client/'
   })
     .pipe(gulp.dest('build'));
@@ -87,6 +87,7 @@ gulp.task('uglify-angular', function() {
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/ui-router/release/angular-ui-router.js',
+    'bower_components/foundation-apps/js/vendor/**/*.js',
     'bower_components/foundation-apps/js/angular/**/*.js'
   ];
 
