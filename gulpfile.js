@@ -75,7 +75,7 @@ gulp.task('uglify', ['uglify-angular'], function() {
     }).on('error', function(e) {
       console.log(e);
     }))
-    .pipe(concat('app.js'))
+    .pipe(concat('dependencies.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
 });
@@ -96,7 +96,7 @@ gulp.task('uglify-angular', function() {
       beautify: true,
       mangle: false
     }))
-    .pipe(concat('angular.js'))
+    .pipe(concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
 
