@@ -6,7 +6,8 @@ var gulp           = require('gulp'),
     sass           = require('gulp-ruby-sass'),
     uglify         = require('gulp-uglify'),
     concat         = require('gulp-concat'),
-    connect        = require('gulp-connect'),
+    browserSync    = require('browser-sync'),
+    reload         = browserSync.reload,
     path           = require('path'),
     modRewrite     = require('connect-modrewrite'),
     dynamicRouting = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
@@ -115,13 +116,15 @@ gulp.task('copy-templates', ['copy'], function() {
 });
 
 gulp.task('server:start', function() {
-  connect.server({
-    root: './build',
-    middleware: function() {
-      return [
-        modRewrite(['^[^\\.]*$ /index.html [L]'])
-      ];
-    },
+  browserSync ({
+    open: false,
+    notify: true,
+    server: {
+      baseDir: './build',
+      middleware: [
+          modRewrite(['^[^\\.]*$ /index.html [L]'])
+        ]
+      }
   });
 });
 
