@@ -15,6 +15,9 @@ var gulp           = require('gulp'),
     uglify         = require('gulp-uglify'),
     concat         = require('gulp-concat'),
     connect        = require('gulp-connect'),
+    es             = require('event-stream'),
+    order          = require('gulp-order'),
+    templateCache  = require('gulp-angular-templatecache'),
     path           = require('path'),
     modRewrite     = require('connect-modrewrite'),
     dynamicRouting = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
@@ -66,12 +69,8 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('./build'));
 
   // Iconic SVG icons
-  gulp.src('./bower_components/foundation-apps/iconic/**/*')
+  return gulp.src('./bower_components/foundation-apps/iconic/**/*')
     .pipe(gulp.dest('./build/assets/img/iconic/'));
-
-  // Foundation's Angular partials
-  return gulp.src(['./bower_components/foundation-apps/js/angular/partials/**.*'])
-    .pipe(gulp.dest('./build/partials/'));
 });
 
 // Compiles Sass
@@ -94,13 +93,31 @@ gulp.task('sass', function() {
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
 gulp.task('uglify', function() {
   // Foundation JavaScript
-  gulp.src(foundationJS)
+  var foundation = gulp.src(foundationJS)
     .pipe(uglify({
       beautify: true,
       mangle: false
     }).on('error', function(e) {
       console.log(e);
     }))
+    .pipe(concat('foundation.js'))
+  ;
+
+  // Pack partials into a angular module
+  var partials = gulp.src(['./bower_components/foundation-apps/js/angular/partials/**.*'])
+    .pipe(templateCache({
+      root: 'partials',
+      module: 'application'
+    }))
+    .pipe(concat('partials.js'))
+  ;
+
+  // Concat partials module to foundation code
+  es.merge(foundation, partials)
+    .pipe(order([
+      "*.js",
+      "*.html"
+    ]))
     .pipe(concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
@@ -145,7 +162,7 @@ gulp.task('server:start', function() {
 gulp.task('build', function() {
   runSequence('clean', ['copy', 'sass', 'uglify'], 'copy-pages', function() {
     console.log("Successfully built.");
-  })
+  });
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
@@ -160,5 +177,5 @@ gulp.task('default', ['build', 'server:start'], function() {
   gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
 
   // Watch app templates
-  gulp.watch(['./client/templates/**/*.html'], ['copy-templates']);
+  gulp.watch(['./client/templates/**/*.html'], ['copy-pages']);
 });
