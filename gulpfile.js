@@ -119,7 +119,7 @@ gulp.task('uglify', function() {
 });
 
 // Copies your app's page templates and generates URLs for them
-gulp.task('copy-pages', ['copy'], function() {
+gulp.task('copy-templates', ['copy'], function() {
   return gulp.src('./client/templates/**/*.html')
     .pipe(dynamicRouting({
       path: 'build/assets/js/routes.js',
@@ -143,7 +143,7 @@ gulp.task('server:start', function() {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function() {
-  runSequence('clean', ['copy', 'sass', 'uglify'], 'copy-pages', function() {
+  runSequence('clean', ['copy', 'sass', 'uglify'], 'copy-templates', function() {
     console.log("Successfully built.");
   })
 });
