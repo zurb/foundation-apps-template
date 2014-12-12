@@ -145,7 +145,7 @@ gulp.task('server:start', function() {
 gulp.task('build', function() {
   runSequence('clean', ['copy', 'sass', 'uglify'], 'copy-templates', function() {
     console.log("Successfully built.");
-  })
+  });
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
@@ -160,5 +160,5 @@ gulp.task('default', ['build', 'server:start'], function() {
   gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
 
   // Watch app templates
-  gulp.watch(['./client/templates/**/*.html'], ['copy-templates']);
+  gulp.watch(['./client/templates/**/*.html'], ['copy-pages']);
 });
