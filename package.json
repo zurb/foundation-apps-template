@@ -1,6 +1,6 @@
 {
   "name": "foundation-apps-template",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "scripts": {
     "start": "gulp"
   },
