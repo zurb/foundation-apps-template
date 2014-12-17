@@ -36,7 +36,8 @@ var foundationJS = [
   'bower_components/angular-animate/angular-animate.js',
   'bower_components/ui-router/release/angular-ui-router.js',
   'bower_components/foundation-apps/js/vendor/**/*.js',
-  'bower_components/foundation-apps/js/angular/**/*.js'
+  'bower_components/foundation-apps/js/angular/**/*.js',
+  '!bower_components/foundation-apps/js/angular/app.js
 ];
 // These files are for your app's JavaScript
 var appJS = [
@@ -70,8 +71,8 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('./build/assets/img/iconic/'));
 
   // Foundation's Angular partials
-  return gulp.src(['./bower_components/foundation-apps/js/angular/partials/**.*'])
-    .pipe(gulp.dest('./build/partials/'));
+  return gulp.src(['./bower_components/foundation-apps/js/angular/components/**.*'])
+    .pipe(gulp.dest('./build/components/'));
 });
 
 // Compiles Sass
