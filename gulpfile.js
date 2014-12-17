@@ -24,8 +24,8 @@ var gulp           = require('gulp'),
 
 // Sass will check these folders for files when you use @import.
 var sassPaths = [
-  'bower_components/foundation-apps/scss',
-  'client/assets/scss'
+  'client/assets/scss',
+  'bower_components/foundation-apps/scss'
 ];
 // These files include Foundation for Apps and its dependencies
 var foundationJS = [
