@@ -7,12 +7,15 @@
 // - - - - - - - - - - - - - - -
 
 var gulp           = require('gulp'),
+    argv           = require('yargs').argv,
     rimraf         = require('rimraf'),
     runSequence    = require('run-sequence'),
     frontMatter    = require('gulp-front-matter'),
     autoprefixer   = require('gulp-autoprefixer'),
     sass           = require('gulp-ruby-sass'),
+    gulpif         = require('gulp-if'),
     uglify         = require('gulp-uglify'),
+    minifyCSS      = require('gulp-minify-css'),
     concat         = require('gulp-concat'),
     connect        = require('gulp-connect'),
     path           = require('path'),
@@ -21,6 +24,9 @@ var gulp           = require('gulp'),
 
 // 2. SETTINGS VARIABLES
 // - - - - - - - - - - - - - - -
+
+// Let's check if the production flag was passed
+var production     = !!(argv.production);
 
 // Sass will check these folders for files when you use @import.
 var sassPaths = [
@@ -89,6 +95,7 @@ gulp.task('sass', function() {
     .pipe(autoprefixer({
       browsers: ['last 2 versions', 'ie 10']
     }))
+    .pipe(gulpif(production, minifyCSS()))
     .pipe(gulp.dest('./build/assets/css/'));
 });
 
@@ -96,24 +103,24 @@ gulp.task('sass', function() {
 gulp.task('uglify', function() {
   // Foundation JavaScript
   gulp.src(foundationJS)
-    .pipe(uglify({
+    .pipe(gulpif(production, uglify({
       beautify: true,
       mangle: false
     }).on('error', function(e) {
       console.log(e);
-    }))
+    })))
     .pipe(concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
 
   // App JavaScript
   return gulp.src(appJS)
-    .pipe(uglify({
+    .pipe(gulpif(production, uglify({
       beautify: true,
       mangle: false
     }).on('error', function(e) {
       console.log(e);
-    }))
+    })))
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
@@ -146,7 +153,7 @@ gulp.task('server:start', function() {
 gulp.task('build', function() {
   runSequence('clean', ['copy', 'sass', 'uglify'], 'copy-templates', function() {
     console.log("Successfully built.");
-  })
+  });
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
