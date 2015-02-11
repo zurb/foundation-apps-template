@@ -77,8 +77,7 @@ gulp.task('sass', function() {
       loadPath: sassPaths,
       style: 'nested',
       bundleExec: true
-    }))
-    .on('error', function(e) {
+    })).on('error', function(e) {
       console.log(e);
     })
     .pipe($.autoprefixer({
