@@ -8,11 +8,11 @@
 //  3.  Breakpoints
 //  4.  Typography
 //  5.  Grid
-//  6.  Accordion
-//  7.  Action Sheet
-//  8.  Block List
-//  9.  Button Group
-//  10. Button
+//  6.  Button
+//  7.  Accordion
+//  8.  Action Sheet
+//  9.  Block List
+//  10. Button Group
 //  11. Card
 //  12. Extras
 //  13. Forms
@@ -130,7 +130,7 @@
 // );
 
 // All of the names in this list will be output as classes in your CSS, like small-12, medium-6, and so on.
-// $breakpoint-classes: (small medium large);
+// $breakpoint-classes: (small medium large); 
 
 // 4. Typography
 // - - - - - - - - - - - - - - -
@@ -238,7 +238,26 @@
 // $total-columns: 12;
 // $block-grid-max-size: 6; 
 
-// 6. Accordion
+// 6. Button
+// - - - - - - - - - - - - - - -
+
+// $button-padding: 0.85em 1em;
+// $button-margin: 0 $global-padding $global-padding 0;
+// $button-style: solid;
+// $button-background: $primary-color;
+// $button-color: auto;
+// $button-radius: 0;
+// $button-sizes: (
+//   tiny: 0.7,
+//   small: 0.8,
+//   medium: 1,
+//   large: 1.3,
+// );
+// $button-font-size: 0.9rem;
+// $button-opacity-disabled: 0.5;
+// $button-tag-selector: false; 
+
+// 7. Accordion
 // - - - - - - - - - - - - - - -
 
 // $accordion-border: 1px solid $gray-dark;
@@ -252,7 +271,7 @@
 // $accordion-title-padding: $global-padding;
 // $accordion-content-padding: $global-padding; 
 
-// 7. Action Sheet
+// 8. Action Sheet
 // - - - - - - - - - - - - - - -
 
 // $actionsheet-background: white;
@@ -270,7 +289,7 @@
 // $actionsheet-link-color: #000;
 // $actionsheet-link-background-hover: smartscale($actionsheet-background); 
 
-// 8. Block List
+// 9. Block List
 // - - - - - - - - - - - - - - -
 
 // $blocklist-background: #fff;
@@ -292,31 +311,12 @@
 
 // $blocklist-check-icons: true; 
 
-// 9. Button Group
+// 10. Button Group
 // - - - - - - - - - - - - - - -
 
 // $btngroup-background: $primary-color;
 // $btngroup-color: #fff;
 // $btngroup-radius: $button-radius; 
-
-// 10. Button
-// - - - - - - - - - - - - - - -
-
-// $button-padding: 0.85em 1em;
-// $button-margin: 0 $global-padding $global-padding 0;
-// $button-style: solid;
-// $button-background: $primary-color;
-// $button-color: auto;
-// $button-radius: 0;
-// $button-sizes: (
-//   tiny: 0.7,
-//   small: 0.8,
-//   medium: 1,
-//   large: 1.3,
-// );
-// $button-font-size: 0.9rem;
-// $button-opacity-disabled: 0.5;
-// $button-tag-selector: true; 
 
 // 11. Card
 // - - - - - - - - - - - - - - -
@@ -412,10 +412,14 @@
 // $label-background: $primary-color;
 // $label-color: isitlight($primary-color);
 
-// $badge-fontsize: 1em;
+// $badge-fontsize: 0.8em;
+// $badge-diameter: 1.5rem;
+// $badge-background: $primary-color;
+// $badge-color: #fff;
+
+// DEPRECATED: these variables will be removed in v1.1.
 // $badge-padding: .1em .61em;
 // $badge-radius: $global-rounded;
-// $badge-background: $primary-color;
 // $badge-font-color: #fff; 
 
 // 16. Menu Bar
@@ -463,6 +467,10 @@
 //   in: "ng-enter-active",
 //   out: "ng-leave-active",
 // );
+// $motion-class-stagger: (
+//   in: "ng-enter-stagger",
+//   out: "ng-leave-stagger",
+// );
 
 // Set if movement-based transitions should also fade the element in and out
 // $motion-slide-and-fade: false;
@@ -471,10 +479,13 @@
 // $motion-spin-and-fade: true;
 
 // Default speed for transitions and animations
-// $motion-duration-default: 700ms;
+// $motion-duration-default: 500ms;
 // Slow and fast modifiders
-// $motion-duration-slow: 1.4s;
-// $motion-duration-fast: 300ms;
+// $motion-duration-slow: 750ms;
+// $motion-duration-fast: 250ms;
+// $motion-stagger-duration-default: 150ms;
+// $motion-stagger-duration-short: 50ms;
+// $motion-stagger-duration-long: 300ms;
 
 // Default timing function for transitions and animations
 // $motion-timing-default: ease;
@@ -511,7 +522,8 @@
 
 // $notification-icon-size: 60px;
 // $notification-icon-margin: $global-padding;
-// $notification-icon-align: top; 
+// $notification-icon-align: top;
+ 
 
 // 20. Off-canvas
 // - - - - - - - - - - - - - - -
