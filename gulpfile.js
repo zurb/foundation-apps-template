@@ -1,41 +1,42 @@
 // FOUNDATION FOR APPS TEMPLATE GULPFILE
 // -------------------------------------
-// This file processes all of the assets in the "client" folder, combines them with the Foundation
-// for Apps assets, and outputs the finished files in the "build" folder as a finished app.
+// This file processes all of the assets in the "client" folder, combines them with the Foundation for Apps assets, and outputs the finished files in the "build" folder as a finished app.
 
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
 
-var gulp = require('gulp'),
-  $ = require('gulp-load-plugins')(),
-  rimraf = require('rimraf'),
-  sequence = require('run-sequence'),
-  router = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
+var gulp     = require('gulp'),
+    $        = require('gulp-load-plugins')(),
+    rimraf   = require('rimraf'),
+    sequence = require('run-sequence'),
+    router   = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
 
-// 2. SETTINGS VARIABLES
+// 2. FILE PATHS
 // - - - - - - - - - - - - - - -
 
-// Sass will check these folders for files when you use @import.
-var sassPaths = [
-  'client/assets/scss',
-  'bower_components/foundation-apps/scss'
-];
-// These files include Foundation for Apps and its dependencies
-var foundationJS = [
-  'bower_components/fastclick/lib/fastclick.js',
-  'bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js',
-  'bower_components/tether/tether.js',
-  'bower_components/angular/angular.js',
-  'bower_components/angular-animate/angular-animate.js',
-  'bower_components/angular-ui-router/release/angular-ui-router.js',
-  'bower_components/foundation-apps/js/vendor/**/*.js',
-  'bower_components/foundation-apps/js/angular/**/*.js',
-  '!bower_components/foundation-apps/js/angular/app.js'
-];
-// These files are for your app's JavaScript
-var appJS = [
-  'client/assets/js/app.js'
-];
+var paths = {
+  // Sass will check these folders for files when you use @import.
+  sass: [
+    'client/assets/scss',
+    'bower_components/foundation-apps/scss'
+  ],
+  // These files include Foundation for Apps and its dependencies
+  foundationJS: [
+    'bower_components/fastclick/lib/fastclick.js',
+    'bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js',
+    'bower_components/tether/tether.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-animate/angular-animate.js',
+    'bower_components/angular-ui-router/release/angular-ui-router.js',
+    'bower_components/foundation-apps/js/vendor/**/*.js',
+    'bower_components/foundation-apps/js/angular/**/*.js',
+    '!bower_components/foundation-apps/js/angular/app.js'
+  ],
+  // These files are for your app's JavaScript
+  appJS: [
+    'client/assets/js/app.js'
+  ]
+}
 
 // 3. TASKS
 // - - - - - - - - - - - - - - -
@@ -46,7 +47,7 @@ gulp.task('clean', function (cb) {
 });
 
 // Copies user-created files and Foundation assets
-gulp.task('copy', function () {
+gulp.task('copy', function(cb) {
   var dirs = [
     './client/**/*.*',
     '!./client/templates/**/*.*',
@@ -64,20 +65,20 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('./build/assets/img/iconic/'));
 
   // Foundation's Angular partials
-  return gulp.src(['./bower_components/foundation-apps/js/angular/components/**/*.html'])
+  gulp.src(['./bower_components/foundation-apps/js/angular/components/**/*.html'])
     .pipe(gulp.dest('./build/components/'));
+
+  cb();
 });
 
 // Compiles Sass
 gulp.task('sass', function () {
   return gulp.src('client/assets/scss/app.scss')
-    .pipe($.rubySass({
-      loadPath: sassPaths,
-      style: 'nested',
-      bundleExec: true
-    })).on('error', function (e) {
-      console.log(e);
-    })
+    .pipe($.sass({
+      includePaths: paths.sass,
+      outputStyle: 'nested',
+      errLogToConsole: true
+    }))
     .pipe($.autoprefixer({
       browsers: ['last 2 versions', 'ie 10']
     }))
@@ -85,9 +86,9 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', function () {
+gulp.task('uglify', function(cb) {
   // Foundation JavaScript
-  gulp.src(foundationJS)
+  gulp.src(paths.foundationJS)
     .pipe($.uglify({
       beautify: true,
       mangle: false
@@ -99,31 +100,31 @@ gulp.task('uglify', function () {
   ;
 
   // App JavaScript
-  return gulp.src(appJS)
-    .pipe($.uglify({
-      beautify: true,
-      mangle: false
-    }).on('error', function (e) {
+  gulp.src(paths.appJS)
+    .pipe($.uglify()
+    .on('error', function(e) {
       console.log(e);
     }))
     .pipe($.concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
-    ;
+  ;
+
+  cb();
 });
 
 // Copies your app's page templates and generates URLs for them
-gulp.task('copy-templates', ['copy'], function () {
+gulp.task('copy:templates', function() {
   return gulp.src('./client/templates/**/*.html')
     .pipe(router({
       path: 'build/assets/js/routes.js',
       root: 'client'
     }))
     .pipe(gulp.dest('./build/templates'))
-    ;
+  ;
 });
 
 // Starts a test server, which you can view at http://localhost:8080
-gulp.task('server:start', function () {
+gulp.task('server:start', function() {
   gulp.src('./build')
     .pipe($.webserver({
       port: 8080,
@@ -131,14 +132,14 @@ gulp.task('server:start', function () {
       fallback: 'index.html',
       livereload: true,
       open: true
-    }));
+    }))
+  ;
 });
 
 // Builds your entire app once, without starting a server
-gulp.task('build', function (cb) {
-  sequence('clean', 'copy', 'sass', 'uglify', 'copy-templates', function () {
+gulp.task('build', function(cb) {
+  sequence('clean', ['copy', 'sass', 'uglify'], 'copy:templates', function() {
     console.log("Successfully built.");
-    // Notify gulp that build has completed
     cb();
   });
 });
