@@ -14,16 +14,9 @@
       <div class="grid-content shrink" style="padding: 0;">
         <ul class="primary condense menu-bar">
           <li><a><strong>Foundation for Apps</strong></a></li>
-          <li><a ui-sref="home">Home</a></li>
-          <li><a ui-sref="home">About</a></li>
-          <li><a ui-sref="home">News</a></li>
-          <li><a ui-sref="home">Contact</a></li>
         </ul>
       </div>
-      <div class="grid-content">
-        <div class="grid-container">
-          <div ng-class="['ui-animation']" ui-view></div>
-        </div>
+      <div ui-view class="grid-content">
       </div>
     </div>
   </body>
