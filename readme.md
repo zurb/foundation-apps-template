@@ -28,7 +28,7 @@ Change into the directory.
 cd app
 ```
 
-Install the dependencies.If you're running Mac OS or Linux, you may need to run `sudo npm install` instead, depending on how your machine is configured.
+Install the dependencies. If you're running Mac OS or Linux, you may need to run `sudo npm install` instead, depending on how your machine is configured.
 
 ```bash
 npm install
