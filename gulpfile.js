@@ -46,7 +46,7 @@ var paths = {
   appJS: [
     'client/assets/js/app.js'
   ]
-}
+};
 
 // 3. TASKS
 // - - - - - - - - - - - - - - -
@@ -113,7 +113,7 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+gulp.task('uglify', ['uglify:foundation', 'uglify:app']);
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -136,6 +136,11 @@ gulp.task('uglify:app', function() {
 
   return gulp.src(paths.appJS)
     .pipe(uglify)
+    .pipe($.ngAnnotate({
+      remove: true,
+      add: true,
+      single_quotes: true
+    }))
     .pipe($.concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
