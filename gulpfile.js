@@ -15,6 +15,11 @@ var gulp     = require('gulp'),
 // - - - - - - - - - - - - - - -
 
 var paths = {
+  assets: [
+    './client/**/*.*',
+    '!./client/templates/**/*.*',
+    '!./client/assets/{scss,js}/**/*.*'
+  ],
   // Sass will check these folders for files when you use @import.
   sass: [
     'client/assets/scss',
@@ -42,33 +47,17 @@ var paths = {
 // - - - - - - - - - - - - - - -
 
 // Cleans the build directory
-gulp.task('clean', function (cb) {
+gulp.task('clean', function(cb) {
   rimraf('./build', cb);
 });
 
-// Copies user-created files and Foundation assets
-gulp.task('copy', function(cb) {
-  var dirs = [
-    './client/**/*.*',
-    '!./client/templates/**/*.*',
-    '!./client/assets/{scss,js}/**/*.*'
-  ];
-
-  // Everything in the client folder except templates, Sass, and JS
-  gulp.src(dirs, {
+// Copies everything in the client folder except templates, Sass, and JS
+gulp.task('copy', function() {
+  return gulp.src(paths.assets, {
     base: './client/'
   })
-    .pipe(gulp.dest('./build'));
-
-  // Iconic SVG icons
-  gulp.src('./bower_components/foundation-apps/iconic/**/*')
-    .pipe(gulp.dest('./build/assets/img/iconic/'));
-
-  // Foundation's Angular partials
-  gulp.src(['./bower_components/foundation-apps/js/angular/components/**/*.html'])
-    .pipe(gulp.dest('./build/components/'));
-
-  cb();
+    .pipe(gulp.dest('./build'))
+  ;
 });
 
 // Compiles Sass
@@ -82,19 +71,18 @@ gulp.task('sass', function () {
     .pipe($.autoprefixer({
       browsers: ['last 2 versions', 'ie 10']
     }))
-    .pipe(gulp.dest('./build/assets/css/'));
+    .pipe(gulp.dest('./build/assets/css/'))
+  ;
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
 gulp.task('uglify', function(cb) {
   // Foundation JavaScript
   gulp.src(paths.foundationJS)
-    .pipe($.uglify({
-      beautify: true,
-      mangle: false
-    }).on('error', function (e) {
-      console.log(e);
-    }))
+    .pipe($.uglify()
+      .on('error', function (e) {
+        console.log(e);
+      }))
     .pipe($.concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
@@ -102,9 +90,9 @@ gulp.task('uglify', function(cb) {
   // App JavaScript
   gulp.src(paths.appJS)
     .pipe($.uglify()
-    .on('error', function(e) {
-      console.log(e);
-    }))
+      .on('error', function(e) {
+        console.log(e);
+      }))
     .pipe($.concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
@@ -123,8 +111,29 @@ gulp.task('copy:templates', function() {
   ;
 });
 
+// Compiles the Foundation for Apps directive partials into a single JavaScript file
+gulp.task('copy:foundation', function(cb) {
+  gulp.src('bower_components/foundation-apps/js/angular/components/**/*.html')
+    .pipe($.ngHtml2js({
+      prefix: 'components/',
+      moduleName: 'foundation',
+      declareModule: false
+    }))
+    .pipe($.uglify())
+    .pipe($.concat('templates.js'))
+    .pipe(gulp.dest('./build/assets/js'))
+  ;
+
+  // Iconic SVG icons
+  gulp.src('./bower_components/foundation-apps/iconic/**/*')
+    .pipe(gulp.dest('./build/assets/img/iconic/'))
+  ;
+
+  cb();
+})
+
 // Starts a test server, which you can view at http://localhost:8080
-gulp.task('server:start', function() {
+gulp.task('server', function() {
   gulp.src('./build')
     .pipe($.webserver({
       port: 8080,
@@ -138,7 +147,7 @@ gulp.task('server:start', function() {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function(cb) {
-  sequence('clean', ['copy', 'sass', 'uglify'], 'copy:templates', function() {
+  sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', function() {
     console.log("Successfully built.");
     cb();
   });
@@ -147,7 +156,7 @@ gulp.task('build', function(cb) {
 // Default task: builds your app, starts a server, and recompiles assets when they change
 gulp.task('default', function () {
   // Run the server after the build
-  sequence('build', 'server:start');
+  sequence('build', 'server');
 
   // Watch Sass
   gulp.watch(['./client/assets/scss/**/*', './scss/**/*'], ['sass']);
