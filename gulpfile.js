@@ -5,11 +5,11 @@
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
 
-var gulp     = require('gulp'),
-    $        = require('gulp-load-plugins')(),
-    rimraf   = require('rimraf'),
-    sequence = require('run-sequence'),
-    router   = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
+var gulp     = require('gulp');
+var $        = require('gulp-load-plugins')();
+var rimraf   = require('rimraf');
+var sequence = require('run-sequence');
+var router   = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
 
 // 2. FILE PATHS
 // - - - - - - - - - - - - - - -
@@ -77,9 +77,9 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', function(cb) {
-  // Foundation JavaScript
-  gulp.src(paths.foundationJS)
+gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+gulp.task('uglify:foundation', function(cb) {
+  return gulp.src(paths.foundationJS)
     .pipe($.uglify()
       .on('error', function (e) {
         console.log(e);
@@ -87,9 +87,9 @@ gulp.task('uglify', function(cb) {
     .pipe($.concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
-
-  // App JavaScript
-  gulp.src(paths.appJS)
+});
+gulp.task('uglify:app', function() {
+  return gulp.src(paths.appJS)
     .pipe($.uglify()
       .on('error', function(e) {
         console.log(e);
@@ -97,8 +97,6 @@ gulp.task('uglify', function(cb) {
     .pipe($.concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
-
-  cb();
 });
 
 // Copies your app's page templates and generates URLs for them
@@ -134,7 +132,7 @@ gulp.task('copy:foundation', function(cb) {
 })
 
 // Starts a test server, which you can view at http://localhost:8080
-gulp.task('server', function() {
+gulp.task('server', ['build'], function() {
   gulp.src('./build')
     .pipe($.webserver({
       port: 8080,
@@ -148,22 +146,16 @@ gulp.task('server', function() {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function(cb) {
-  sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', function() {
-    console.log("Successfully built.");
-    cb();
-  });
+  sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
-gulp.task('default', function () {
-  // Run the server after the build
-  sequence('build', 'server');
-
+gulp.task('default', ['server'], function () {
   // Watch Sass
   gulp.watch(['./client/assets/scss/**/*', './scss/**/*'], ['sass']);
 
   // Watch JavaScript
-  gulp.watch(['./client/assets/js/**/*', './js/**/*'], ['uglify']);
+  gulp.watch(['./client/assets/js/**/*', './js/**/*'], ['uglify:app']);
 
   // Watch static files
   gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
