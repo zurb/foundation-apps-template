@@ -5,11 +5,15 @@
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
 
-var gulp     = require('gulp');
 var $        = require('gulp-load-plugins')();
+var argv     = require('yargs').argv;
+var gulp     = require('gulp');
 var rimraf   = require('rimraf');
+var router   = require('front-router');
 var sequence = require('run-sequence');
-var router   = require('./bower_components/foundation-apps/bin/gulp-dynamic-routing');
+
+// Check for --production flag
+var isProduction = !!(argv.production);
 
 // 2. FILE PATHS
 // - - - - - - - - - - - - - - -
@@ -66,7 +70,7 @@ gulp.task('sass', function () {
   return gulp.src('client/assets/scss/app.scss')
     .pipe($.sass({
       includePaths: paths.sass,
-      outputStyle: 'nested',
+      outputStyle: (isProduction ? 'compressed' : 'nested'),
       errLogToConsole: true
     }))
     .pipe($.autoprefixer({
@@ -79,21 +83,25 @@ gulp.task('sass', function () {
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
 gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
 gulp.task('uglify:foundation', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
   return gulp.src(paths.foundationJS)
-    .pipe($.uglify()
-      .on('error', function (e) {
-        console.log(e);
-      }))
+    .pipe(uglify)
     .pipe($.concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
 });
 gulp.task('uglify:app', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
   return gulp.src(paths.appJS)
-    .pipe($.uglify()
-      .on('error', function(e) {
-        console.log(e);
-      }))
+    .pipe(uglify)
     .pipe($.concat('app.js'))
     .pipe(gulp.dest('./build/assets/js/'))
   ;
