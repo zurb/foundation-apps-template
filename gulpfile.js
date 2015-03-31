@@ -65,48 +65,6 @@ gulp.task('copy', function() {
   ;
 });
 
-// Compiles Sass
-gulp.task('sass', function () {
-  return gulp.src('client/assets/scss/app.scss')
-    .pipe($.sass({
-      includePaths: paths.sass,
-      outputStyle: (isProduction ? 'compressed' : 'nested'),
-      errLogToConsole: true
-    }))
-    .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'ie 10']
-    }))
-    .pipe(gulp.dest('./build/assets/css/'))
-  ;
-});
-
-// Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
-gulp.task('uglify:foundation', function(cb) {
-  var uglify = $.if(isProduction, $.uglify()
-    .on('error', function (e) {
-      console.log(e);
-    }));
-
-  return gulp.src(paths.foundationJS)
-    .pipe(uglify)
-    .pipe($.concat('foundation.js'))
-    .pipe(gulp.dest('./build/assets/js/'))
-  ;
-});
-gulp.task('uglify:app', function() {
-  var uglify = $.if(isProduction, $.uglify()
-    .on('error', function (e) {
-      console.log(e);
-    }));
-
-  return gulp.src(paths.appJS)
-    .pipe(uglify)
-    .pipe($.concat('app.js'))
-    .pipe(gulp.dest('./build/assets/js/'))
-  ;
-});
-
 // Copies your app's page templates and generates URLs for them
 gulp.task('copy:templates', function() {
   return gulp.src('./client/templates/**/*.html')
@@ -137,7 +95,51 @@ gulp.task('copy:foundation', function(cb) {
   ;
 
   cb();
-})
+});
+
+// Compiles Sass
+gulp.task('sass', function () {
+  return gulp.src('client/assets/scss/app.scss')
+    .pipe($.sass({
+      includePaths: paths.sass,
+      outputStyle: (isProduction ? 'compressed' : 'nested'),
+      errLogToConsole: true
+    }))
+    .pipe($.autoprefixer({
+      browsers: ['last 2 versions', 'ie 10']
+    }))
+    .pipe(gulp.dest('./build/assets/css/'))
+  ;
+});
+
+// Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
+gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+
+gulp.task('uglify:foundation', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths.foundationJS)
+    .pipe(uglify)
+    .pipe($.concat('foundation.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:app', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths.appJS)
+    .pipe(uglify)
+    .pipe($.concat('app.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
 
 // Starts a test server, which you can view at http://localhost:8080
 gulp.task('server', ['build'], function() {
