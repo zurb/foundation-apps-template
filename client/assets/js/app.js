@@ -15,7 +15,7 @@
   ;
 
   function config($urlRouterProvider, $locationProvider) {
-    $urlProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode({
       enabled:false,
