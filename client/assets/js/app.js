@@ -14,10 +14,8 @@
     .run(run)
   ;
 
-  config.$inject = ['$urlRouterProvider', '$locationProvider'];
-
-  function config($urlProvider, $locationProvider) {
-    $urlProvider.otherwise('/');
+  function config($urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode({
       enabled:false,
