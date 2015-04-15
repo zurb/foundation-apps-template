@@ -11,6 +11,7 @@ var gulp     = require('gulp');
 var rimraf   = require('rimraf');
 var router   = require('front-router');
 var sequence = require('run-sequence');
+var path     = require('path');
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -67,13 +68,33 @@ gulp.task('copy', function() {
 
 // Copies your app's page templates and generates URLs for them
 gulp.task('copy:templates', function() {
-  return gulp.src('./client/templates/**/*.html')
-    .pipe(router({
-      path: 'build/assets/js/routes.js',
-      root: 'client'
-    }))
-    .pipe(gulp.dest('./build/templates'))
-  ;
+  var filter = $.filter('*.jade'),
+    // TRICKY: Use `.html` for routing and `.jade` or `.html` for filtering.
+    oldExtMap = {};
+
+  function getBasePath(file){
+    return file.dirname + path.sep + file.basename;
+  }
+
+  return gulp.src([
+      './client/templates/**/*.html',
+      './client/templates/**/*.jade'
+    ])
+      .pipe($.rename(function(file){
+        oldExtMap[getBasePath(file)] = file.extname;
+        file.extname = '.html';
+      }))
+      .pipe(router({
+        path: 'build/assets/js/routes.js',
+        root: 'client'
+      }))
+      .pipe($.rename(function(file){
+        file.extname = oldExtMap[getBasePath(file)];
+      }))
+      .pipe(filter)
+      .pipe($.jade())
+      .pipe(filter.restore())
+      .pipe(gulp.dest('./build/templates'));
 });
 
 // Compiles the Foundation for Apps directive partials into a single JavaScript file
