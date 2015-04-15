@@ -6,6 +6,7 @@
     <title>Foundation for Apps</title>
     <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
     <script src="/assets/js/foundation.js"></script>
+    <script src="/assets/js/templates.js"></script>
     <script src="/assets/js/routes.js"></script>
     <script src="/assets/js/app.js"></script>
   </head>
@@ -14,16 +15,9 @@
       <div class="grid-content shrink" style="padding: 0;">
         <ul class="primary condense menu-bar">
           <li><a><strong>Foundation for Apps</strong></a></li>
-          <li><a ui-sref="home">Home</a></li>
-          <li><a ui-sref="home">About</a></li>
-          <li><a ui-sref="home">News</a></li>
-          <li><a ui-sref="home">Contact</a></li>
         </ul>
       </div>
-      <div class="grid-content">
-        <div class="grid-container">
-          <div ng-class="['ui-animation']" ui-view></div>
-        </div>
+      <div ui-view class="grid-content">
       </div>
     </div>
   </body>
