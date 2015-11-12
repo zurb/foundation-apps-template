@@ -104,6 +104,10 @@ gulp.task('sass', function () {
       includePaths: paths.sass,
       outputStyle: (isProduction ? 'compressed' : 'nested'),
       errLogToConsole: true
+    })
+    .on('error', function (e) {
+      console.log(e);
+      this.emit('end');
     }))
     .pipe($.autoprefixer({
       browsers: ['last 2 versions', 'ie 10']
